@@ -73,16 +73,16 @@ const (
 
 // Defines values for EnumParam1.
 const (
-	EnumParam1Both  EnumParam1 = "both"
-	EnumParam1False EnumParam1 = "false"
-	EnumParam1True  EnumParam1 = "true"
+	EnumParam1Both EnumParam1 = "both"
+	EnumParam1Off  EnumParam1 = "off"
+	EnumParam1On   EnumParam1 = "on"
 )
 
 // Defines values for EnumParam2.
 const (
-	EnumParam2Both  EnumParam2 = "both"
-	EnumParam2False EnumParam2 = "false"
-	EnumParam2True  EnumParam2 = "true"
+	EnumParam2Both EnumParam2 = "both"
+	EnumParam2Off  EnumParam2 = "off"
+	EnumParam2On   EnumParam2 = "on"
 )
 
 // Defines values for EnumParam3.
@@ -250,7 +250,7 @@ type OneOfObject3_Union struct {
 	union json.RawMessage
 }
 
-// OneOfObject4 oneOf plus fixed type - custom marshaling/unmarshaling
+// OneOfObject4 oneOf plus fixed type - custom marshaling/unmarshalling
 type OneOfObject4 struct {
 	FixedProperty *string `json:"fixedProperty,omitempty"`
 	union         json.RawMessage
@@ -442,7 +442,7 @@ func (a *BodyWithAddPropsJSONBody) UnmarshalJSON(b []byte) error {
 			var fieldVal interface{}
 			err := json.Unmarshal(fieldBuf, &fieldVal)
 			if err != nil {
-				return fmt.Errorf("error unmarshaling field %s: %w", fieldName, err)
+				return fmt.Errorf("error unmarshalling field %s: %w", fieldName, err)
 			}
 			a.AdditionalProperties[fieldName] = fieldVal
 		}
@@ -529,7 +529,7 @@ func (a *AdditionalPropertiesObject1) UnmarshalJSON(b []byte) error {
 			var fieldVal int
 			err := json.Unmarshal(fieldBuf, &fieldVal)
 			if err != nil {
-				return fmt.Errorf("error unmarshaling field %s: %w", fieldName, err)
+				return fmt.Errorf("error unmarshalling field %s: %w", fieldName, err)
 			}
 			a.AdditionalProperties[fieldName] = fieldVal
 		}
@@ -607,7 +607,7 @@ func (a *AdditionalPropertiesObject3) UnmarshalJSON(b []byte) error {
 			var fieldVal interface{}
 			err := json.Unmarshal(fieldBuf, &fieldVal)
 			if err != nil {
-				return fmt.Errorf("error unmarshaling field %s: %w", fieldName, err)
+				return fmt.Errorf("error unmarshalling field %s: %w", fieldName, err)
 			}
 			a.AdditionalProperties[fieldName] = fieldVal
 		}
@@ -681,7 +681,7 @@ func (a *AdditionalPropertiesObject4) UnmarshalJSON(b []byte) error {
 			var fieldVal interface{}
 			err := json.Unmarshal(fieldBuf, &fieldVal)
 			if err != nil {
-				return fmt.Errorf("error unmarshaling field %s: %w", fieldName, err)
+				return fmt.Errorf("error unmarshalling field %s: %w", fieldName, err)
 			}
 			a.AdditionalProperties[fieldName] = fieldVal
 		}
@@ -752,7 +752,7 @@ func (a *AdditionalPropertiesObject4_Inner) UnmarshalJSON(b []byte) error {
 			var fieldVal interface{}
 			err := json.Unmarshal(fieldBuf, &fieldVal)
 			if err != nil {
-				return fmt.Errorf("error unmarshaling field %s: %w", fieldName, err)
+				return fmt.Errorf("error unmarshalling field %s: %w", fieldName, err)
 			}
 			a.AdditionalProperties[fieldName] = fieldVal
 		}
@@ -1011,19 +1011,25 @@ func (t OneOfObject10) MarshalJSON() ([]byte, error) {
 		}
 	}
 
-	object["one"], err = json.Marshal(t.One)
-	if err != nil {
-		return nil, fmt.Errorf("error marshaling 'one': %w", err)
+	if t.One != nil {
+		object["one"], err = json.Marshal(t.One)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling 'one': %w", err)
+		}
 	}
 
-	object["three"], err = json.Marshal(t.Three)
-	if err != nil {
-		return nil, fmt.Errorf("error marshaling 'three': %w", err)
+	if t.Three != nil {
+		object["three"], err = json.Marshal(t.Three)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling 'three': %w", err)
+		}
 	}
 
-	object["two"], err = json.Marshal(t.Two)
-	if err != nil {
-		return nil, fmt.Errorf("error marshaling 'two': %w", err)
+	if t.Two != nil {
+		object["two"], err = json.Marshal(t.Two)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling 'two': %w", err)
+		}
 	}
 	b, err = json.Marshal(object)
 	return b, err
@@ -1616,9 +1622,11 @@ func (t OneOfObject4) MarshalJSON() ([]byte, error) {
 		}
 	}
 
-	object["fixedProperty"], err = json.Marshal(t.FixedProperty)
-	if err != nil {
-		return nil, fmt.Errorf("error marshaling 'fixedProperty': %w", err)
+	if t.FixedProperty != nil {
+		object["fixedProperty"], err = json.Marshal(t.FixedProperty)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling 'fixedProperty': %w", err)
+		}
 	}
 	b, err = json.Marshal(object)
 	return b, err
@@ -1931,9 +1939,11 @@ func (t OneOfObject8) MarshalJSON() ([]byte, error) {
 		}
 	}
 
-	object["fixed"], err = json.Marshal(t.Fixed)
-	if err != nil {
-		return nil, fmt.Errorf("error marshaling 'fixed': %w", err)
+	if t.Fixed != nil {
+		object["fixed"], err = json.Marshal(t.Fixed)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling 'fixed': %w", err)
+		}
 	}
 	b, err = json.Marshal(object)
 	return b, err
@@ -2060,6 +2070,7 @@ func (t OneOfObject9) MarshalJSON() ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("error marshaling 'type': %w", err)
 	}
+
 	b, err = json.Marshal(object)
 	return b, err
 }

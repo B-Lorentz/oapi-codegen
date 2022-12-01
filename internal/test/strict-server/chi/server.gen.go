@@ -259,16 +259,16 @@ func (e *UnescapedCookieParamError) Unwrap() error {
 	return e.Err
 }
 
-type UnmarshalingParamError struct {
+type UnmarshallingParamError struct {
 	ParamName string
 	Err       error
 }
 
-func (e *UnmarshalingParamError) Error() string {
-	return fmt.Sprintf("Error unmarshaling parameter %s as JSON: %s", e.ParamName, e.Err.Error())
+func (e *UnmarshallingParamError) Error() string {
+	return fmt.Sprintf("Error unmarshalling parameter %s as JSON: %s", e.ParamName, e.Err.Error())
 }
 
-func (e *UnmarshalingParamError) Unwrap() error {
+func (e *UnmarshallingParamError) Unwrap() error {
 	return e.Err
 }
 
@@ -561,7 +561,7 @@ type ReusableResponsesResponseObject interface {
 	VisitReusableResponsesResponse(w http.ResponseWriter) error
 }
 
-type ReusableResponses200JSONResponse = ReusableresponseJSONResponse
+type ReusableResponses200JSONResponse struct{ ReusableresponseJSONResponse }
 
 func (response ReusableResponses200JSONResponse) VisitReusableResponsesResponse(w http.ResponseWriter) error {
 	w.Header().Set("header1", fmt.Sprint(response.Headers.Header1))
